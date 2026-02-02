@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nazir Noori — Human Architecture</title>
+  
+  <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
@@ -14,317 +16,190 @@
       --accent: #8b8b8b;
       --font-main: 'Bricolage Grotesque', sans-serif;
       --font-serif: 'Instrument Serif', serif;
-      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
       --pad: 6vw;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    /* 1. GLOBAL ENHANCEMENTS */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    html { scroll-behavior: smooth; }
+    
+    ::selection { background: rgba(0,0,0,0.08); color: var(--text); }
+
+    /* Hide Scrollbar for clean look */
+    ::-webkit-scrollbar { width: 0px; display: none; }
 
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-main);
-      transition: background-color 1.2s var(--ease);
+      transition: background-color 1.5s var(--ease);
       overflow-x: hidden;
-      line-height: 1.4;
+      line-height: 1.2;
+      opacity: 0; /* For Page Entrance Animation */
+      animation: fadeInPage 0.8s ease forwards;
     }
 
-    /* 1. GRAIN OVERLAY */
+    @keyframes fadeInPage { to { opacity: 1; } }
+
+    /* 2. TEXTURE & PROGRESS */
     body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Noise_Texture.png");
-      opacity: 0.04;
-      pointer-events: none;
-      z-index: 99999;
+      opacity: 0.04; pointer-events: none; z-index: 10000;
     }
 
-    /* 2. CUSTOM CURSOR (Desktop Only) */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--text); width: 0%; z-index: 10001;
+    }
+
+    /* 3. CURSOR & NAVIGATION */
     #cursor {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      background: white;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 100000;
-      mix-blend-mode: difference;
-      display: none;
+      position: fixed; width: 10px; height: 10px; background: white;
+      border-radius: 50%; pointer-events: none; z-index: 100000;
+      mix-blend-mode: difference; display: none; transition: transform 0.2s var(--ease);
     }
 
     @media (pointer: fine) {
-      #cursor {
-        display: block;
-      }
-
-      body,
-      a,
-      button {
-        cursor: none !important;
-      }
+      #cursor { display: block; }
+      body, a, button { cursor: none !important; }
     }
 
-    /* 3. NAVIGATION GLASSSMORPHISM */
     nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem var(--pad);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 9000;
-      transition: all 0.5s var(--ease);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 2.5rem var(--pad); position: fixed; width: 100%; top: 0; z-index: 9000;
     }
 
-    nav.scrolled {
-      padding: 1.2rem var(--pad);
-      background: rgba(245, 245, 243, 0.7);
-      backdrop-filter: blur(15px);
+    .brand { 
+      font-weight: 800; font-size: 1.2rem; letter-spacing: -0.05em; 
+      transition: font-variation-settings 0.4s;
     }
+    .brand:hover { font-variation-settings: 'wght' 900; }
 
-    .brand {
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: -0.05em;
+    .nav-link { 
+      font-weight: 800; font-size: 0.7rem; letter-spacing: 0.1em; 
+      cursor: pointer; position: relative;
     }
-
-    .nav-link {
-      font-weight: 800;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      position: relative;
-      overflow: hidden;
+    .nav-link::after {
+      content: ''; position: absolute; width: 100%; transform: scaleX(0);
+      height: 1px; bottom: -4px; left: 0; background-color: var(--text);
+      transform-origin: bottom right; transition: transform 0.4s var(--ease);
     }
+    .nav-link:hover::after { transform: scaleX(1); transform-origin: bottom left; }
 
     /* 4. HERO SECTION */
-    .hero {
-      padding: 35vh var(--pad) 15vh;
-      max-width: 1600px;
+    .hero { padding: 38vh var(--pad) 15vh; max-width: 1600px; }
+    .display { 
+      font-size: clamp(3.2rem, 11vw, 10.5rem); font-weight: 200; 
+      line-height: 0.82; letter-spacing: -0.06em;
+      transform: translateY(40px); opacity: 0;
+      animation: revealIn 1.4s var(--ease) 0.2s forwards;
     }
+    @keyframes revealIn { to { transform: translateY(0); opacity: 1; } }
+    .italic { font-family: var(--font-serif); font-style: italic; }
 
-    .display {
-      font-size: clamp(3rem, 11vw, 10rem);
-      font-weight: 200;
-      line-height: 0.85;
-      letter-spacing: -0.06em;
-    }
-
-    .italic {
-      font-family: var(--font-serif);
-      font-style: italic;
-    }
-
-    /* 5. MARQUEE SECTION (Creative Addition) */
+    /* 5. MARQUEE */
     .marquee {
-      padding: 4rem 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      overflow: hidden;
-      display: flex;
-      white-space: nowrap;
+      padding: 2.5rem 0; border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      overflow: hidden; display: flex; white-space: nowrap;
     }
-
     .marquee-content {
-      display: flex;
-      animation: scroll 30s linear infinite;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.2em;
-      color: var(--accent);
+      display: flex; animation: scroll 45s linear infinite;
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.25em; color: var(--accent);
     }
+    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    @keyframes scroll {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    /* 6. FEED WITH IMAGE REVEAL */
-    .feed {
-      padding: 5rem var(--pad);
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
+    /* 6. POST FEED */
+    .feed { padding: 8rem var(--pad); max-width: 1300px; margin: 0 auto; }
     .post {
-      display: grid;
-      grid-template-columns: 50px 1fr 40px;
-      gap: 2rem;
-      padding: 4rem 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      text-decoration: none;
-      color: inherit;
-      transition: 0.4s var(--ease);
-      position: relative;
+      display: grid; grid-template-columns: 60px 1fr 40px;
+      gap: 2rem; padding: 4.5rem 0; border-top: 1px solid rgba(0, 0, 0, 0.1);
+      text-decoration: none; color: inherit; transition: 0.6s var(--ease);
+      position: relative; opacity: 0; transform: translateY(50px);
     }
+    .post.visible { opacity: 1; transform: translateY(0); }
+    
+    .post-info h2 { font-family: var(--font-serif); font-size: clamp(2.4rem, 6.5vw, 5rem); font-weight: 400; line-height: 0.95; }
+    .post-info p { font-size: 0.75rem; text-transform: uppercase; margin-top: 0.8rem; opacity: 0.4; letter-spacing: 0.05em; }
 
-    .post-info h2 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 400;
-      line-height: 0.9;
-    }
-
-    /* Subtle image preview on hover */
     .post-preview {
-      position: absolute;
-      right: 10%;
-      top: 50%;
-      width: 200px;
-      height: 120px;
-      background: var(--text);
-      transform: translateY(-50%) scale(0.8) rotate(5deg);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.5s var(--ease);
-      overflow: hidden;
-      border-radius: 4px;
+      position: absolute; right: 18%; top: 50%; width: 220px; height: 130px;
+      background: #d1d1d1; transform: translateY(-50%) scale(0.8) perspective(1000px) rotateY(-10deg);
+      opacity: 0; pointer-events: none; transition: 0.7s var(--ease);
+      border-radius: 4px; filter: contrast(1.1) grayscale(1);
     }
+    .post:hover .post-preview { opacity: 0.15; transform: translateY(-50%) scale(1) rotateY(0deg); }
+    .post:hover { padding-left: 2.5rem; background: rgba(0,0,0,0.01); }
+    .post:active { transform: scale(0.99); }
 
-    .post:hover .post-preview {
-      opacity: 0.15;
-      transform: translateY(-50%) scale(1) rotate(0deg);
-    }
-
-    .post:hover {
-      padding-left: 2rem;
-    }
-
-    /* 7. SIDEBAR UI */
-    .side-ui {
-      position: fixed;
-      top: 50%;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: var(--accent);
-      z-index: 100;
-    }
-
-    .ui-left {
-      left: 1rem;
-      transform: translateY(-50%) rotate(-90deg);
-      transform-origin: left center;
-    }
-
-    .ui-right {
-      right: 1rem;
-      transform: translateY(-50%) rotate(90deg);
-      transform-origin: right center;
-    }
-
-    @media (max-width: 1024px) {
-
-      .side-ui,
-      .post-preview {
-        display: none;
-      }
-    }
-
-    /* 8. FOOTER MAGNET */
-    footer {
-      padding: 15rem var(--pad) 4rem;
-    }
-
-    .footer-big {
-      font-family: var(--font-serif);
-      font-size: clamp(4rem, 18vw, 16rem);
-      line-height: 0.75;
-      letter-spacing: -0.05em;
-      cursor: pointer;
-      transition: 0.6s var(--ease);
-    }
-
-    .footer-big:hover {
-      transform: skewX(-5deg);
-      color: var(--accent);
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      padding-top: 2rem;
-      margin-top: 8rem;
-    }
-
-    /* 9. MODAL UPGRADE */
+    /* 7. RESPONSIVE MODAL */
     #contact-modal {
-      position: fixed;
-      inset: 0;
-      background: var(--text);
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      padding: var(--pad);
-      opacity: 0;
-      transition: opacity 0.6s var(--ease);
+      position: fixed; height: 100svh; width: 100vw; inset: 0;
+      background: rgba(26, 26, 26, 0.92); backdrop-filter: blur(25px);
+      z-index: 10002; display: none; flex-direction: column; color: white;
+      padding: var(--pad); opacity: 0; transition: opacity 0.6s var(--ease);
+    }
+    #contact-modal.active { display: flex; opacity: 1; }
+    
+    #close-form { align-self: flex-end; padding: 1.5rem 0; font-weight: 800; cursor: pointer; font-size: 0.7rem; letter-spacing: 0.2em; }
+    .modal-inner { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 900px; margin: 0 auto; }
+    .mail-link { 
+      color: white; font-size: clamp(1.6rem, 7.5vw, 3.5rem); text-decoration: none;
+      word-break: break-all; border-bottom: 1px solid rgba(255,255,255,0.1); transition: 0.4s; padding-bottom: 0.5rem;
+    }
+    .mail-link:hover { border-bottom-color: white; }
+
+    /* 8. FOOTER */
+    footer { padding: 18rem var(--pad) 5rem; }
+    .footer-big { 
+      font-family: var(--font-serif); font-size: clamp(4.5rem, 19vw, 16rem); 
+      cursor: pointer; transition: 0.6s var(--ease); display: inline-block;
+    }
+    .footer-big:hover { font-style: italic; transform: translateX(20px); color: var(--accent); }
+    
+    .footer-bottom {
+      display: flex; justify-content: space-between; font-size: 0.65rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1); padding-top: 2.5rem; margin-top: 10rem;
+      font-weight: 800; letter-spacing: 0.05em;
     }
 
-    #contact-modal.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    /* 10. RESPONSIVE REFINEMENT */
+    /* 9. MOBILE FINISH */
     @media (max-width: 768px) {
-      .post {
-        grid-template-columns: 30px 1fr 20px;
-        gap: 1rem;
-        padding: 3rem 0;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
+      .post { grid-template-columns: 40px 1fr 20px; gap: 1rem; padding: 3.5rem 0; }
+      .footer-bottom { flex-direction: column; gap: 2rem; text-align: center; align-items: center; }
+      .modal-inner { justify-content: flex-start; padding-top: 18vh; }
+      .hero { padding-top: 25vh; }
     }
   </style>
 </head>
 
 <body>
+  <div id="scroll-progress"></div>
   <div id="cursor"></div>
 
-  <div class="side-ui ui-left">AVAILABLE FOR PROJECTS — 2026</div>
-  <div class="side-ui ui-right">3.1390° N, 101.6869° E</div>
-
-  <div id="contact-modal">
-    <div id="close-form" style="position: absolute; top: 2rem; right: 2rem; cursor: pointer; font-weight: 800;">CLOSE</div>
-    <div style="max-width: 600px;">
-      <h2 class="italic" style="font-size: clamp(3rem, 12vw, 6rem);">Let's build.</h2>
-      <p style="margin: 2rem 0; opacity: 0.6;">Specializing in the intersection of logic and emotion.</p>
-      <a href="mailto:hello@nazirnoori.com" style="color: white; font-size: 2rem; text-decoration: none; border-bottom: 2px solid white;">nazir_noori@yahoo.com</a>
+  <div id="contact-modal" role="dialog" aria-modal="true">
+    <div id="close-form">CLOSE (ESC)</div>
+    <div class="modal-inner">
+      <h2 class="italic" style="font-size: clamp(3.5rem, 12vw, 7rem); line-height: 0.85;">Let's <br>build.</h2>
+      <p style="margin: 2.5rem 0; opacity: 0.5; max-width: 450px; line-height: 1.6;">Currently available for select freelance opportunities and strategic collaborations.</p>
+      <a href="mailto:hello@nazirnoori.com" class="mail-link">hello@nazirnoori.com</a>
     </div>
   </div>
 
-  <nav id="navbar">
+  <nav>
     <div class="brand">NAZIR NOORI</div>
-    <div id="open-contact" class="nav-link" style="cursor: pointer;">GET IN TOUCH</div>
+    <div id="open-contact" class="nav-link">GET IN TOUCH</div>
   </nav>
 
   <main>
-    <section class="hero">
+    <header class="hero">
       <h1 class="display">Exploring <span class="italic">human</span> architecture in a <span class="italic">digital</span> world.</h1>
-    </section>
+    </header>
 
-    <div class="marquee">
+    <div class="marquee" aria-hidden="true">
       <div class="marquee-content">
         STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
         STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
@@ -332,35 +207,41 @@
     </div>
 
     <section class="feed">
-      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
-        <div style="font-style: italic; opacity: 0.3;">01</div>
-        <div class="post-info">
-          <h2>What Hurts... Also Heals</h2>
-          <p>Resilience and emotional frameworks.</p>
-        </div>
-        <div class="post-preview"></div>
-        <div style="font-size: 1.5rem;">↗</div>
-      </a>
+      <article>
+        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
+          <div style="font-style: italic; opacity: 0.3;">01</div>
+          <div class="post-info">
+            <h2>What Hurts... Also Heals</h2>
+            <p>Resilience and emotional frameworks</p>
+          </div>
+          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=1'); background-size: cover;"></div>
+          <div style="font-size: 1.2rem;">↗</div>
+        </a>
+      </article>
 
-      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
-        <div style="font-style: italic; opacity: 0.3;">02</div>
-        <div class="post-info">
-          <h2>The Sentiment of Logic</h2>
-          <p>MBA strategy meets clean code.</p>
-        </div>
-        <div class="post-preview"></div>
-        <div style="font-size: 1.5rem;">↗</div>
-      </a>
+      <article>
+        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
+          <div style="font-style: italic; opacity: 0.3;">02</div>
+          <div class="post-info">
+            <h2>The Sentiment of Logic</h2>
+            <p>Intersection of MBA strategy and code</p>
+          </div>
+          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=2'); background-size: cover;"></div>
+          <div style="font-size: 1.2rem;">↗</div>
+        </a>
+      </article>
 
-      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f5ebe0">
-        <div style="font-style: italic; opacity: 0.3;">03</div>
-        <div class="post-info">
-          <h2>The Paradox of Comfort</h2>
-          <p>Why digital friction is necessary.</p>
-        </div>
-        <div class="post-preview"></div>
-        <div style="font-size: 1.5rem;">↗</div>
-      </a>
+      <article>
+        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f5ebe0">
+          <div style="font-style: italic; opacity: 0.3;">03</div>
+          <div class="post-info">
+            <h2>Digital Friction</h2>
+            <p>Designing for intentional human action</p>
+          </div>
+          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=3'); background-size: cover;"></div>
+          <div style="font-size: 1.2rem;">↗</div>
+        </a>
+      </article>
     </section>
 
     <footer>
@@ -370,80 +251,70 @@
       <div class="footer-bottom">
         <div>LOC — KUALA LUMPUR</div>
         <div id="time">00:00 KL</div>
-        <div>© 2026 NAZIR NOORI — ALL RIGHTS RESERVED</div>
+        <div>© 2026 NAZIR NOORI</div>
       </div>
     </footer>
   </main>
 
   <script>
-    // Cursor Logic
+    // 1. Scroll Progress Logic
+    window.addEventListener('scroll', () => {
+      const scroll = document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      document.getElementById('scroll-progress').style.width = (scroll / height) * 100 + "%";
+    });
+
+    // 2. Optimized Cursor (with Magnet Effect on hover)
     const cursor = document.getElementById('cursor');
     if (window.matchMedia("(pointer: fine)").matches) {
-      let mouse = {
-          x: 0,
-          y: 0
-        },
-        pos = {
-          x: 0,
-          y: 0
-        };
-      window.addEventListener('mousemove', e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
-      const anim = () => {
-        pos.x += (mouse.x - pos.x) * 0.15;
-        pos.y += (mouse.y - pos.y) * 0.15;
+      let mouse = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      const tick = () => {
+        pos.x += (mouse.x - pos.x) * 0.15; pos.y += (mouse.y - pos.y) * 0.15;
         cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(anim);
+        requestAnimationFrame(tick);
       };
-      anim();
-      document.querySelectorAll('a, #open-contact, #footer-trigger, #close-form').forEach(el => {
+      tick();
+      document.querySelectorAll('a, .nav-link, #footer-trigger, #close-form').forEach(el => {
         el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(6)');
         el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(6)', ''));
       });
     }
-    // Nav Scroll
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 100) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-    });
-    // Modal
+
+    // 3. Intersection Observer (Reveal & Color Shift)
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) {
+          e.target.classList.add('visible');
+          if(e.target.dataset.color) document.body.style.backgroundColor = e.target.dataset.color;
+        }
+      });
+    }, { threshold: 0.25 });
+    document.querySelectorAll('.post').forEach(p => obs.observe(p));
+
+    // 4. Modal Management
     const modal = document.getElementById('contact-modal');
-    const toggleModal = (on) => {
-      if (on) {
-        modal.classList.add('active');
-        modal.style.display = 'flex';
-      } else {
-        modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 600);
+    const toggleM = (on) => {
+      if(on) { 
+        modal.style.display = 'flex'; 
+        setTimeout(() => modal.classList.add('active'), 20);
+        document.body.style.overflow = 'hidden'; 
+      } else { 
+        modal.classList.remove('active'); 
+        setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 600); 
       }
     };
-    document.getElementById('open-contact').addEventListener('click', () => toggleModal(true));
-    document.getElementById('footer-trigger').addEventListener('click', () => toggleModal(true));
-    document.getElementById('close-form').addEventListener('click', () => toggleModal(false));
-    // BG Color Shift
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) document.body.style.backgroundColor = e.target.dataset.color;
-      });
-    }, {
-      threshold: 0.5
-    });
-    document.querySelectorAll('.post').forEach(p => observer.observe(p));
-    // Time
+    document.getElementById('open-contact').addEventListener('click', () => toggleM(true));
+    document.getElementById('footer-trigger').addEventListener('click', () => toggleM(true));
+    document.getElementById('close-form').addEventListener('click', () => toggleM(false));
+    window.addEventListener('keydown', (e) => { if(e.key === "Escape") toggleM(false); });
+
+    // 5. Dynamic Time
     const updateTime = () => {
-      const t = new Date().toLocaleTimeString('en-GB', {
-        timeZone: 'Asia/Kuala_Lumpur',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      const t = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' });
       document.getElementById('time').innerText = t + ' KL';
     };
-    setInterval(updateTime, 1000);
-    updateTime();
+    setInterval(updateTime, 1000); updateTime();
   </script>
 </body>
-
 </html>
