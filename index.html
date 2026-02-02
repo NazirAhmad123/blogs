@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nazir Noori | Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
@@ -14,77 +14,88 @@
       --font-main: 'Bricolage Grotesque', sans-serif;
       --font-serif: 'Instrument Serif', serif;
       --ease: cubic-bezier(0.19, 1, 0.22, 1);
-      --pad: 2.5rem;
-    }
-
-    @media (max-width: 768px) {
-      :root {
-        --pad: 1.5rem;
-      }
+      --pad: 5vw; /* Responsive padding */
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-main);
-      transition: background-color 0.8s var(--ease);
+      transition: background-color 1s var(--ease);
       overflow-x: hidden;
+      line-height: 1.5;
     }
 
+    /* Custom Cursor - Only for Desktop */
     #cursor {
       position: fixed;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background: white;
       border-radius: 50%;
       pointer-events: none;
       z-index: 100000;
       mix-blend-mode: difference;
       display: none;
+      transition: transform 0.3s var(--ease);
     }
 
     @media (pointer: fine) {
-      #cursor {
-        display: block;
-      }
-
-      * {
-        cursor: none !important;
-      }
+      #cursor { display: block; }
+      body, a, button { cursor: none !important; }
     }
 
+    /* Navigation */
     nav {
       display: flex;
       justify-content: space-between;
-      padding: var(--pad);
+      align-items: center;
+      padding: 1.5rem var(--pad);
       position: fixed;
       width: 100%;
       top: 0;
       z-index: 9999;
+      transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(245, 245, 243, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem var(--pad);
     }
 
     .brand {
       font-weight: 800;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       letter-spacing: -0.05em;
     }
 
+    #open-contact {
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 2px;
+    }
+
+    /* Hero Section */
     .hero {
-      padding: 15rem var(--pad) 5rem;
+      padding: 35vh var(--pad) 10vh;
       max-width: 1400px;
       margin: 0 auto;
     }
 
     .display {
-      font-size: clamp(2.5rem, 9vw, 8rem);
+      font-size: clamp(2.8rem, 10vw, 8rem);
       font-weight: 200;
-      line-height: 0.9;
+      line-height: 0.85;
       letter-spacing: -0.06em;
     }
 
@@ -93,143 +104,149 @@
       font-style: italic;
     }
 
+    /* Feed / Posts */
     .feed {
-      padding: 2rem var(--pad);
+      padding: 0 var(--pad) 5rem;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .post {
       display: grid;
-      grid-template-columns: 50px 1fr 40px;
-      gap: 2rem;
-      padding: 4rem 0;
+      grid-template-columns: 40px 1fr 30px;
+      gap: 1.5rem;
+      padding: 3rem 0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       text-decoration: none;
       color: inherit;
-      transition: 0.4s var(--ease);
+      transition: all 0.4s var(--ease);
     }
 
-    .post:hover {
-      padding-left: 1rem;
-      background: rgba(0, 0, 0, 0.01);
+    @media (hover: hover) {
+      .post:hover {
+        padding-left: 1.5rem;
+        background: rgba(0, 0, 0, 0.02);
+      }
     }
+
+    .post:active { background: rgba(0, 0, 0, 0.05); }
 
     .post-info h2 {
       font-family: var(--font-serif);
-      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-size: clamp(2rem, 6vw, 4rem);
       font-weight: 400;
       line-height: 1;
+      margin-bottom: 0.5rem;
     }
 
-    /* --- STICKY SIDE ANCHORS --- */
+    .post-info p {
+      font-size: 0.9rem;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Side UI Elements */
     .side-ui {
       position: fixed;
       top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: var(--accent);
       z-index: 100;
-      pointer-events: none;
       display: flex;
       align-items: center;
       gap: 1rem;
+      white-space: nowrap;
     }
 
-    .ui-left {
-      left: 1rem;
-      transform: translateY(-50%) rotate(-90deg);
-      transform-origin: center left;
-    }
+    .ui-left { left: 1rem; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; }
+    .ui-right { right: 1rem; transform: translateY(-50%) rotate(90deg); transform-origin: right center; }
 
-    .ui-right {
-      right: 1rem;
-      transform: translateY(-50%) rotate(90deg);
-      transform-origin: center right;
-    }
+    @media (max-width: 1100px) { .side-ui { display: none; } }
 
-    @media (max-width: 1024px) {
-      .side-ui {
-        display: none;
-      }
-    }
-
-    /* Hide on small screens to prevent overlap */
     .status-dot {
       width: 6px;
       height: 6px;
       background: #2ecc71;
       border-radius: 50%;
-      animation: pulse 2s infinite;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
     }
 
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.3;
-      }
-    }
-
-    /* --- FIXED FOOTER LAYOUT --- */
+    /* Footer */
     footer {
-      padding: 10rem var(--pad) 4rem;
-      position: relative;
-      width: 100%;
-    }
-
-    .footer-content {
-      position: relative;
-      margin-bottom: 6rem;
+      padding: 10rem var(--pad) 3rem;
+      background: transparent;
     }
 
     .footer-big {
       font-family: var(--font-serif);
-      font-size: clamp(4rem, 16vw, 16rem);
-      line-height: 0.75;
+      font-size: clamp(3.5rem, 18vw, 15rem);
+      line-height: 0.8;
       letter-spacing: -0.05em;
-      transition: 0.4s var(--ease);
-      cursor: pointer;
+      transition: 0.5s var(--ease);
       display: inline-block;
-    }
-
-    .footer-big:hover {
-      transform: translateX(20px) italic;
-      font-style: italic;
     }
 
     .footer-bottom {
       display: flex;
       justify-content: space-between;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding-top: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
+      margin-top: 5rem;
+      opacity: 0.6;
     }
 
+    /* Modal Styling */
     #contact-modal {
       position: fixed;
       inset: 0;
       background: var(--text);
-      z-index: 10000;
+      z-index: 10001;
       display: none;
       align-items: center;
       justify-content: center;
       color: white;
       padding: var(--pad);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease);
+    }
+
+    #contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 600px;
+      transform: translateY(20px);
+      transition: transform 0.6s var(--ease);
+    }
+
+    #contact-modal.active .modal-content { transform: translateY(0); }
+
+    .mail-link {
+      color: white;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding-bottom: 5px;
+      transition: border 0.3s;
+    }
+
+    .mail-link:hover { border-bottom: 1px solid white; }
+
+    @media (max-width: 600px) {
+        .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; align-items: center; }
+        .post { grid-template-columns: 30px 1fr 20px; gap: 1rem; }
     }
   </style>
 </head>
 
 <body>
-
   <div id="cursor"></div>
 
   <div class="side-ui ui-left">
@@ -242,17 +259,17 @@
   </div>
 
   <div id="contact-modal">
-    <div id="close-form" style="position: absolute; top: 2rem; right: 2rem; font-weight: 800; cursor: pointer; letter-spacing: 0.1em;">CLOSE</div>
-    <div style="width: 100%; max-width: 500px;">
-      <h2 class="italic" style="font-size: 5rem; margin-bottom: 1.5rem;">Say hi.</h2>
-      <p style="opacity: 0.6; margin-bottom: 2.5rem; font-size: 1.2rem;">Available for creative strategy and logic-driven development.</p>
-      <a href="mailto:hello@nazirnoori.com" style="color: white; font-size: 2rem; text-decoration: none; border-bottom: 1px solid white;">hello@nazirnoori.com</a>
+    <div id="close-form" style="position: absolute; top: 2rem; right: var(--pad); font-weight: 800; cursor: pointer;">CLOSE</div>
+    <div class="modal-content">
+      <h2 class="italic" style="font-size: clamp(3rem, 10vw, 5rem); margin-bottom: 1rem;">Say hi.</h2>
+      <p style="opacity: 0.6; margin-bottom: 2rem;">Available for creative strategy and development.</p>
+      <a href="mailto:hello@nazirnoori.com" class="mail-link">hello@nazirnoori.com</a>
     </div>
   </div>
 
-  <nav>
+  <nav id="navbar">
     <div class="brand">NAZIR NOORI</div>
-    <div id="open-contact" style="font-weight: 800; font-size: 0.75rem; letter-spacing: 0.1em;">CONTACT</div>
+    <div id="open-contact" style="cursor: pointer;">CONTACT</div>
   </nav>
 
   <main>
@@ -261,29 +278,27 @@
     </section>
 
     <section class="feed">
-      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
+      <a href="#" class="post" data-color="#f2f2ee">
         <div style="font-style: italic; opacity: 0.3;">01</div>
         <div class="post-info">
           <h2>What Hurts... Also Heals</h2>
-          <p>Resilience and emotional frameworks.</p>
+          <p>Resilience Frameworks</p>
         </div>
-        <div style="font-size: 1.5rem;">↗</div>
+        <div style="font-size: 1.2rem;">↗</div>
       </a>
-      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
+      <a href="#" class="post" data-color="#edeef5">
         <div style="font-style: italic; opacity: 0.3;">02</div>
         <div class="post-info">
           <h2>The Sentiment of Logic</h2>
-          <p>Intersection of MBA strategy and code.</p>
+          <p>MBA Strategy + Code</p>
         </div>
-        <div style="font-size: 1.5rem;">↗</div>
+        <div style="font-size: 1.2rem;">↗</div>
       </a>
     </section>
 
     <footer>
-      <div class="footer-content">
-        <div id="footer-trigger">
-          <h2 class="footer-big">Get in <span class="italic">Touch</span></h2>
-        </div>
+      <div id="footer-trigger" style="cursor: pointer;">
+        <h2 class="footer-big">Get in <span class="italic">Touch</span></h2>
       </div>
 
       <div class="footer-bottom">
@@ -295,58 +310,71 @@
   </main>
 
   <script>
+    // 1. Optimized Custom Cursor
     const cursor = document.getElementById('cursor');
-    const isTouch = ('ontouchstart' in window);
-    if (!isTouch) {
-      let mouse = {
-          x: 0,
-          y: 0
-        },
-        pos = {
-          x: 0,
-          y: 0
-        };
-      document.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
+    if (window.matchMedia("(pointer: fine)").matches) {
+      let mouse = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
-      function animate() {
-        pos.x += (mouse.x - pos.x) * 0.2;
-        pos.y += (mouse.y - pos.y) * 0.2;
+      const updateCursor = () => {
+        pos.x += (mouse.x - pos.x) * 0.15;
+        pos.y += (mouse.y - pos.y) * 0.15;
         cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(animate);
-      }
-      animate();
-      document.querySelectorAll('a, #open-contact, #footer-trigger, #close-form').forEach(item => {
-        item.addEventListener('mouseenter', () => cursor.style.transform += ' scale(6)');
-        item.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(6)', ''));
+        requestAnimationFrame(updateCursor);
+      };
+      updateCursor();
+
+      document.querySelectorAll('a, #open-contact, #footer-trigger, #close-form').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(5)');
+        el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(5)', ''));
       });
     }
-    const toggleForm = (s) => document.getElementById('contact-modal').style.display = s ? 'flex' : 'none';
+
+    // 2. Navigation Scroll Effect
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    // 3. Modal Logic
+    const modal = document.getElementById('contact-modal');
+    const toggleForm = (open) => {
+      if (open) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+      } else {
+        modal.classList.remove('active');
+        setTimeout(() => modal.style.display = 'none', 500);
+      }
+    };
     document.getElementById('open-contact').addEventListener('click', () => toggleForm(true));
     document.getElementById('footer-trigger').addEventListener('click', () => toggleForm(true));
     document.getElementById('close-form').addEventListener('click', () => toggleForm(false));
 
+    // 4. Background Color Intersection Observer
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.body.style.backgroundColor = entry.target.dataset.color;
+        } else {
+            // Optional: Reset to default if not over a post
+            // document.body.style.backgroundColor = 'var(--bg)';
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.post').forEach(p => obs.observe(p));
+
+    // 5. Time Update
     function updateTime() {
       const t = new Date().toLocaleTimeString('en-GB', {
         timeZone: 'Asia/Kuala_Lumpur',
-        hour: '2-digit',
-        minute: '2-digit'
+        hour: '2-digit', minute: '2-digit'
       });
       document.getElementById('time').innerText = t + ' KL';
     }
     setInterval(updateTime, 1000);
     updateTime();
-    const obs = new IntersectionObserver((es) => {
-      es.forEach(e => {
-        if (e.isIntersecting) document.body.style.backgroundColor = e.target.dataset.color;
-      });
-    }, {
-      threshold: 0.5
-    });
-    document.querySelectorAll('.post').forEach(p => obs.observe(p));
   </script>
 </body>
-
 </html>
