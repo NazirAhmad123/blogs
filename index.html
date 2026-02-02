@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nazir Noori — Human Architecture</title>
-  
-  <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+  <title>Nazir</title>
 
+  <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
@@ -16,240 +16,375 @@
       --accent: #8b8b8b;
       --font-main: 'Bricolage Grotesque', sans-serif;
       --font-serif: 'Instrument Serif', serif;
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
-      --pad: 6vw;
+      --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --pad: 7vw;
     }
 
-    /* 1. GLOBAL ENHANCEMENTS */
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    html { scroll-behavior: smooth; }
-    
-    ::selection { background: rgba(0,0,0,0.08); color: var(--text); }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f0f0f;
+        --text: #e5e5e5;
+        --accent: #777;
+      }
+    }
 
-    /* Hide Scrollbar for clean look */
-    ::-webkit-scrollbar { width: 0px; display: none; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+      height: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-main);
-      transition: background-color 1.5s var(--ease);
+      transition: background-color 0.8s var(--ease-in-out);
       overflow-x: hidden;
-      line-height: 1.2;
-      opacity: 0; /* For Page Entrance Animation */
-      animation: fadeInPage 0.8s ease forwards;
+      line-height: 1.15;
+      -webkit-font-smoothing: antialiased;
     }
 
-    @keyframes fadeInPage { to { opacity: 1; } }
-
-    /* 2. TEXTURE & PROGRESS */
-    body::before {
-      content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    /* SUBTLE NOISE OVERLAY */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
       background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Noise_Texture.png");
-      opacity: 0.04; pointer-events: none; z-index: 10000;
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 10000;
     }
 
     #scroll-progress {
-      position: fixed; top: 0; left: 0; height: 2px;
-      background: var(--text); width: 0%; z-index: 10001;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--text);
+      width: 0%;
+      z-index: 10001;
+      transition: width 0.1s linear;
     }
 
-    /* 3. CURSOR & NAVIGATION */
-    #cursor {
-      position: fixed; width: 10px; height: 10px; background: white;
-      border-radius: 50%; pointer-events: none; z-index: 100000;
-      mix-blend-mode: difference; display: none; transition: transform 0.2s var(--ease);
-    }
-
-    @media (pointer: fine) {
-      #cursor { display: block; }
-      body, a, button { cursor: none !important; }
-    }
-
+    /* NAV UPGRADE */
     nav {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 2.5rem var(--pad); position: fixed; width: 100%; top: 0; z-index: 9000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem var(--pad);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 9000;
+      mix-blend-mode: difference;
+      color: white;
     }
 
-    .brand { 
-      font-weight: 800; font-size: 1.2rem; letter-spacing: -0.05em; 
-      transition: font-variation-settings 0.4s;
+    .brand {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
     }
-    .brand:hover { font-variation-settings: 'wght' 900; }
 
-    .nav-link { 
-      font-weight: 800; font-size: 0.7rem; letter-spacing: 0.1em; 
-      cursor: pointer; position: relative;
+    .nav-right {
+      display: flex;
+      gap: 1.8rem;
+      align-items: center;
     }
-    .nav-link::after {
-      content: ''; position: absolute; width: 100%; transform: scaleX(0);
-      height: 1px; bottom: -4px; left: 0; background-color: var(--text);
-      transform-origin: bottom right; transition: transform 0.4s var(--ease);
-    }
-    .nav-link:hover::after { transform: scaleX(1); transform-origin: bottom left; }
 
-    /* 4. HERO SECTION */
-    .hero { padding: 38vh var(--pad) 15vh; max-width: 1600px; }
-    .display { 
-      font-size: clamp(3.2rem, 11vw, 10.5rem); font-weight: 200; 
-      line-height: 0.82; letter-spacing: -0.06em;
-      transform: translateY(40px); opacity: 0;
-      animation: revealIn 1.4s var(--ease) 0.2s forwards;
+    .nav-link {
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
     }
-    @keyframes revealIn { to { transform: translateY(0); opacity: 1; } }
-    .italic { font-family: var(--font-serif); font-style: italic; }
 
-    /* 5. MARQUEE */
-    .marquee {
-      padding: 2.5rem 0; border-top: 1px solid rgba(0,0,0,0.06);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      overflow: hidden; display: flex; white-space: nowrap;
+    .resume-btn {
+      padding: 0.6rem 1.4rem;
+      border: 1.5px solid currentColor;
+      border-radius: 40px;
+      transition: transform 0.3s var(--ease-out), background 0.3s;
     }
-    .marquee-content {
-      display: flex; animation: scroll 45s linear infinite;
-      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.25em; color: var(--accent);
-    }
-    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* 6. POST FEED */
-    .feed { padding: 8rem var(--pad); max-width: 1300px; margin: 0 auto; }
-    .post {
-      display: grid; grid-template-columns: 60px 1fr 40px;
-      gap: 2rem; padding: 4.5rem 0; border-top: 1px solid rgba(0, 0, 0, 0.1);
-      text-decoration: none; color: inherit; transition: 0.6s var(--ease);
-      position: relative; opacity: 0; transform: translateY(50px);
+    .resume-btn:hover {
+      transform: scale(1.05);
+      background: white;
+      color: black;
     }
-    .post.visible { opacity: 1; transform: translateY(0); }
-    
-    .post-info h2 { font-family: var(--font-serif); font-size: clamp(2.4rem, 6.5vw, 5rem); font-weight: 400; line-height: 0.95; }
-    .post-info p { font-size: 0.75rem; text-transform: uppercase; margin-top: 0.8rem; opacity: 0.4; letter-spacing: 0.05em; }
 
-    .post-preview {
-      position: absolute; right: 18%; top: 50%; width: 220px; height: 130px;
-      background: #d1d1d1; transform: translateY(-50%) scale(0.8) perspective(1000px) rotateY(-10deg);
-      opacity: 0; pointer-events: none; transition: 0.7s var(--ease);
-      border-radius: 4px; filter: contrast(1.1) grayscale(1);
+    section {
+      scroll-snap-align: start;
+      min-height: 60vh;
+      position: relative;
+      padding: 15vh var(--pad);
     }
-    .post:hover .post-preview { opacity: 0.15; transform: translateY(-50%) scale(1) rotateY(0deg); }
-    .post:hover { padding-left: 2.5rem; background: rgba(0,0,0,0.01); }
-    .post:active { transform: scale(0.99); }
 
-    /* 7. RESPONSIVE MODAL */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 20vh;
+    }
+
+    .display {
+      font-size: clamp(3.5rem, 9.5vw, 10rem);
+      font-weight: 200;
+      line-height: 0.85;
+      letter-spacing: -0.05em;
+    }
+
+    .italic {
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .bio {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 10vw;
+      border-top: 1px solid rgba(128, 128, 128, 0.1);
+    }
+
+    .bio-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .bio-text {
+      font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+      line-height: 1.3;
+      font-weight: 300;
+    }
+
+    /* LIST REFINEMENT */
+    .list-container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .list-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 60px;
+      gap: 2rem;
+      padding: 5rem 0;
+      border-top: 1px solid rgba(128, 128, 128, 0.15);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.5s var(--ease-out);
+    }
+
+    .list-item:hover {
+      transform: translateX(10px);
+      color: var(--accent);
+    }
+
+    .list-item h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .summary {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--accent);
+      max-width: 600px;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .meta {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* MODAL UX */
     #contact-modal {
-      position: fixed; height: 100svh; width: 100vw; inset: 0;
-      background: rgba(26, 26, 26, 0.92); backdrop-filter: blur(25px);
-      z-index: 10002; display: none; flex-direction: column; color: white;
-      padding: var(--pad); opacity: 0; transition: opacity 0.6s var(--ease);
-    }
-    #contact-modal.active { display: flex; opacity: 1; }
-    
-    #close-form { align-self: flex-end; padding: 1.5rem 0; font-weight: 800; cursor: pointer; font-size: 0.7rem; letter-spacing: 0.2em; }
-    .modal-inner { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 900px; margin: 0 auto; }
-    .mail-link { 
-      color: white; font-size: clamp(1.6rem, 7.5vw, 3.5rem); text-decoration: none;
-      word-break: break-all; border-bottom: 1px solid rgba(255,255,255,0.1); transition: 0.4s; padding-bottom: 0.5rem;
-    }
-    .mail-link:hover { border-bottom-color: white; }
-
-    /* 8. FOOTER */
-    footer { padding: 18rem var(--pad) 5rem; }
-    .footer-big { 
-      font-family: var(--font-serif); font-size: clamp(4.5rem, 19vw, 16rem); 
-      cursor: pointer; transition: 0.6s var(--ease); display: inline-block;
-    }
-    .footer-big:hover { font-style: italic; transform: translateX(20px); color: var(--accent); }
-    
-    .footer-bottom {
-      display: flex; justify-content: space-between; font-size: 0.65rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.1); padding-top: 2.5rem; margin-top: 10rem;
-      font-weight: 800; letter-spacing: 0.05em;
+      position: fixed;
+      inset: 0;
+      background: var(--text);
+      color: var(--bg);
+      z-index: 10002;
+      display: none;
+      flex-direction: column;
+      padding: var(--pad);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease-in-out);
     }
 
-    /* 9. MOBILE FINISH */
-    @media (max-width: 768px) {
-      .post { grid-template-columns: 40px 1fr 20px; gap: 1rem; padding: 3.5rem 0; }
-      .footer-bottom { flex-direction: column; gap: 2rem; text-align: center; align-items: center; }
-      .modal-inner { justify-content: flex-start; padding-top: 18vh; }
-      .hero { padding-top: 25vh; }
+    #contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    footer {
+      padding: 25vh var(--pad) 5vh;
+      transition: all 0.8s var(--ease-in-out);
+    }
+
+    footer.inverted {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .footer-big {
+      font-family: var(--font-serif);
+      font-size: clamp(5rem, 18vw, 15rem);
+      cursor: pointer;
+      line-height: 0.75;
+      letter-spacing: -0.03em;
+    }
+
+    @media (max-width: 900px) {
+      .bio {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .list-item {
+        grid-template-columns: 1fr 40px;
+      }
+
+      .list-index {
+        display: none;
+      }
+
+      .resume-btn {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
   <div id="scroll-progress"></div>
-  <div id="cursor"></div>
+  <div id="cursor" style="position:fixed; width:8px; height:8px; background:white; border-radius:50%; pointer-events:none; z-index:100000; mix-blend-mode:difference; display:none; transition: width 0.3s, height 0.3s;"></div>
 
-  <div id="contact-modal" role="dialog" aria-modal="true">
-    <div id="close-form">CLOSE (ESC)</div>
-    <div class="modal-inner">
-      <h2 class="italic" style="font-size: clamp(3.5rem, 12vw, 7rem); line-height: 0.85;">Let's <br>build.</h2>
-      <p style="margin: 2.5rem 0; opacity: 0.5; max-width: 450px; line-height: 1.6;">Currently available for select freelance opportunities and strategic collaborations.</p>
-      <a href="mailto:hello@nazirnoori.com" class="mail-link">hello@nazirnoori.com</a>
+  <div id="contact-modal">
+    <div id="close-form" style="align-self: flex-end; cursor: pointer; font-weight: 800; font-size: 0.75rem; border-bottom: 1px solid currentColor;">CLOSE</div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 900px; margin: 0 auto;">
+      <p class="bio-label" style="color: inherit; opacity: 0.5; margin-bottom: 2rem;">Inquiry</p>
+      <h2 class="italic" style="font-size: clamp(3rem, 10vw, 7rem); line-height: 0.8;">Seek <br>Conversation.</h2>
+      <a href="mailto:nazir_noori@yahoo.com" style="color: inherit; font-size: clamp(1.5rem, 6vw, 3rem); text-decoration: none; border-bottom: 2px solid currentColor; width: fit-content; margin: 3rem 0; padding-bottom: 0.5rem;">nazir_noori@yahoo.com</a>
+
+      <div style="display: flex; gap: 3rem; font-size: 0.8rem; font-weight: 800;">
+        <a href="https://github.com/NazirAhmad123/blogs/blob/main/Updatedresume.pdf" style="color: inherit; text-decoration: none; opacity: 0.6; transition: 0.3s;">RESUMÉ</a>
+        <a href="https://www.amazon.com/stores/Nazir-Noori/author/B0F4Q2QX3R" target="_blank" style="color: inherit; text-decoration: none; opacity: 0.6; transition: 0.3s;">AMAZON</a>
+        <a href="https://www.linkedin.com/in/nazir-noori/" style="color: inherit; text-decoration: none; opacity: 0.6; transition: 0.3s;">LINKEDIN</a>
+      </div>
     </div>
   </div>
 
   <nav>
     <div class="brand">NAZIR NOORI</div>
-    <div id="open-contact" class="nav-link">GET IN TOUCH</div>
+    <div class="nav-right">
+      <a href="https://github.com/NazirAhmad123/blogs/blob/main/Updatedresume.pdf"" class="nav-link resume-btn">RESUMÉ</a>
+      <div id="open-contact" class="nav-link" style="padding: 0.5rem 0;">CONTACT</div>
+    </div>
   </nav>
 
   <main>
-    <header class="hero">
-      <h1 class="display">Exploring <span class="italic">human</span> architecture in a <span class="italic">digital</span> world.</h1>
-    </header>
-
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-content">
-        STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
-        STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
-      </div>
-    </div>
-
-    <section class="feed">
-      <article>
-        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
-          <div style="font-style: italic; opacity: 0.3;">01</div>
-          <div class="post-info">
-            <h2>What Hurts... Also Heals</h2>
-            <p>Resilience and emotional frameworks</p>
-          </div>
-          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=1'); background-size: cover;"></div>
-          <div style="font-size: 1.2rem;">↗</div>
-        </a>
-      </article>
-
-      <article>
-        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
-          <div style="font-style: italic; opacity: 0.3;">02</div>
-          <div class="post-info">
-            <h2>The Sentiment of Logic</h2>
-            <p>Intersection of MBA strategy and code</p>
-          </div>
-          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=2'); background-size: cover;"></div>
-          <div style="font-size: 1.2rem;">↗</div>
-        </a>
-      </article>
-
-      <article>
-        <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f5ebe0">
-          <div style="font-style: italic; opacity: 0.3;">03</div>
-          <div class="post-info">
-            <h2>Digital Friction</h2>
-            <p>Designing for intentional human action</p>
-          </div>
-          <div class="post-preview" style="background-image: url('https://picsum.photos/400/250?grayscale&v=3'); background-size: cover;"></div>
-          <div style="font-size: 1.2rem;">↗</div>
-        </a>
-      </article>
+    <section class="hero">
+      <h1 class="display">Finding the <span class="italic">quiet</span> center where <span class="italic">strategy</span> meets silence.</h1>
     </section>
 
-    <footer>
-      <div id="footer-trigger">
-        <h2 class="footer-big">Contact <span class="italic">Me</span></h2>
+    <section class="bio">
+      <p class="bio-label">01 / Perspective</p>
+      <div class="bio-text">
+        I am interested in the <span class="italic">architecture of presence</span>—how we build systems that don't just function, but breathe. My work is a search for the logic that lives within sentiment, and the stillness that remains when the noise of the digital world falls away.
+        <br><br>
+        Whether through strategy or the written word, I aim to return us to what is <span class="italic">already home</span>.
       </div>
-      <div class="footer-bottom">
-        <div>LOC — KUALA LUMPUR</div>
+    </section>
+
+    <section class="list-container">
+      <p class="bio-label" style="margin-bottom: 4rem;">02 / Bibliography</p>
+
+      <a href="https://a.co/d/9QQNgP0" target="_blank" class="list-item">
+        <div class="list-index" style="font-style: italic; opacity: 0.3;">BK.01</div>
+        <div>
+          <h2>The Heart of Presence</h2>
+          <p class="summary">A map for moving beyond the noise of thought into the clarity of the now.</p>
+          <p class="meta">FINDING FREEDOM IN THE NOW</p>
+        </div>
+        <div style="font-size: 1.5rem; justify-self: flex-end;">↗</div>
+      </a>
+
+      <a href="https://a.co/d/fw610wR" target="_blank" class="list-item">
+        <div class="list-index" style="font-style: italic; opacity: 0.3;">BK.02</div>
+        <div>
+          <h2>The Living Flame</h2>
+          <p class="summary">Distilling the profound teachings of J. Krishnamurti into a guide for self-observation.</p>
+          <p class="meta">THE TEACHINGS OF J. KRISHNAMURTI</p>
+        </div>
+        <div style="font-size: 1.5rem; justify-self: flex-end;">↗</div>
+      </a>
+
+      <a href="https://a.co/d/8f9VgQF" target="_blank" class="list-item">
+        <div class="list-index" style="font-style: italic; opacity: 0.3;">BK.03</div>
+        <div>
+          <h2>Already Home</h2>
+          <p class="summary">A reminder that peace is not a destination, but our natural state of rest.</p>
+          <p class="meta">REST IN NOW</p>
+        </div>
+        <div style="font-size: 1.5rem; justify-self: flex-end;">↗</div>
+      </a>
+    </section>
+
+    <section class="list-container">
+      <p class="bio-label" style="margin-bottom: 4rem;">03 / Writings</p>
+
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="list-item">
+        <div class="list-index" style="font-style: italic; opacity: 0.3;">AR.01</div>
+        <div>
+          <h2>What Hurts... Also Heals</h2>
+          <p class="summary">On pain as the architectural blueprint for resilience.</p>
+          <p class="meta">STORY ON MEDIUM</p>
+        </div>
+        <div style="font-size: 1.5rem; justify-self: flex-end;">↗</div>
+      </a>
+
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="list-item">
+        <div class="list-index" style="font-style: italic; opacity: 0.3;">AR.02</div>
+        <div>
+          <h2>The Sentiment of Logic</h2>
+          <p class="summary">Grounding analytical systems in the truth of human emotion.</p>
+          <p class="meta">STORY ON MEDIUM</p>
+        </div>
+        <div style="font-size: 1.5rem; justify-self: flex-end;">↗</div>
+      </a>
+    </section>
+
+    <footer id="footer">
+      <div id="footer-trigger">
+        <h2 class="footer-big">Reach <span class="italic">Out</span></h2>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.7rem; font-weight: 800; margin-top: 15vh; opacity: 0.5; border-top: 1px solid currentColor; padding-top: 3rem;">
+        <div>KUALA LUMPUR, MALAYSIA</div>
         <div id="time">00:00 KL</div>
         <div>© 2026 NAZIR NOORI</div>
       </div>
@@ -257,64 +392,88 @@
   </main>
 
   <script>
-    // 1. Scroll Progress Logic
+    // SMOOTH PROGRESS
     window.addEventListener('scroll', () => {
       const scroll = document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       document.getElementById('scroll-progress').style.width = (scroll / height) * 100 + "%";
     });
-
-    // 2. Optimized Cursor (with Magnet Effect on hover)
+    // REFINED CURSOR
     const cursor = document.getElementById('cursor');
     if (window.matchMedia("(pointer: fine)").matches) {
-      let mouse = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
-      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-      const tick = () => {
-        pos.x += (mouse.x - pos.x) * 0.15; pos.y += (mouse.y - pos.y) * 0.15;
+      cursor.style.display = 'block';
+      let mouse = {
+          x: 0,
+          y: 0
+        },
+        pos = {
+          x: 0,
+          y: 0
+        };
+      window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      const xTick = () => {
+        pos.x += (mouse.x - pos.x) * 0.2;
+        pos.y += (mouse.y - pos.y) * 0.2;
         cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(tick);
+        requestAnimationFrame(xTick);
       };
-      tick();
-      document.querySelectorAll('a, .nav-link, #footer-trigger, #close-form').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(6)');
-        el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(6)', ''));
+      xTick();
+      document.querySelectorAll('a, .nav-link, #footer-trigger').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.width = '60px';
+          cursor.style.height = '60px';
+          cursor.style.opacity = '0.15';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.width = '8px';
+          cursor.style.height = '8px';
+          cursor.style.opacity = '1';
+        });
       });
     }
-
-    // 3. Intersection Observer (Reveal & Color Shift)
-    const obs = new IntersectionObserver((entries) => {
+    // INTERSECTION OBSERVER
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if(e.isIntersecting) {
-          e.target.classList.add('visible');
-          if(e.target.dataset.color) document.body.style.backgroundColor = e.target.dataset.color;
-        }
+        if (e.isIntersecting && e.target.id === 'footer') e.target.classList.add('inverted');
+        else e.target.classList.remove('inverted');
       });
-    }, { threshold: 0.25 });
-    document.querySelectorAll('.post').forEach(p => obs.observe(p));
-
-    // 4. Modal Management
+    }, {
+      threshold: 0.4
+    });
+    observer.observe(document.getElementById('footer'));
+    // MODAL HANDLERS
     const modal = document.getElementById('contact-modal');
     const toggleM = (on) => {
-      if(on) { 
-        modal.style.display = 'flex'; 
-        setTimeout(() => modal.classList.add('active'), 20);
-        document.body.style.overflow = 'hidden'; 
-      } else { 
-        modal.classList.remove('active'); 
-        setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 600); 
+      if (on) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+        document.body.style.overflow = 'hidden';
+      } else {
+        modal.classList.remove('active');
+        setTimeout(() => {
+          modal.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 500);
       }
     };
     document.getElementById('open-contact').addEventListener('click', () => toggleM(true));
     document.getElementById('footer-trigger').addEventListener('click', () => toggleM(true));
     document.getElementById('close-form').addEventListener('click', () => toggleM(false));
-    window.addEventListener('keydown', (e) => { if(e.key === "Escape") toggleM(false); });
-
-    // 5. Dynamic Time
+    // CLOCK
     const updateTime = () => {
-      const t = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' });
+      const t = new Date().toLocaleTimeString('en-GB', {
+        timeZone: 'Asia/Kuala_Lumpur',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
       document.getElementById('time').innerText = t + ' KL';
     };
-    setInterval(updateTime, 1000); updateTime();
+    setInterval(updateTime, 1000);
+    updateTime();
   </script>
 </body>
+
 </html>
