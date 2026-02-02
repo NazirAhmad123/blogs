@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f5f3;
+      --text: #1a1a1a;
+      --accent: #8b8b8b;
+      --font-main: 'Bricolage Grotesque', sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --ease: cubic-bezier(0.19, 1, 0.22, 1);
+      --pad: 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --pad: 1.5rem;
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      transition: background-color 0.8s var(--ease);
+      overflow-x: hidden;
+    }
+
+    #cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100000;
+      mix-blend-mode: difference;
+      display: none;
+    }
+
+    @media (pointer: fine) {
+      #cursor {
+        display: block;
+      }
+
+      * {
+        cursor: none !important;
+      }
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--pad);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 9999;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.05em;
+    }
+
+    .hero {
+      padding: 15rem var(--pad) 5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .display {
+      font-size: clamp(2.5rem, 9vw, 8rem);
+      font-weight: 200;
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+    }
+
+    .italic {
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .feed {
+      padding: 2rem var(--pad);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .post {
+      display: grid;
+      grid-template-columns: 50px 1fr 40px;
+      gap: 2rem;
+      padding: 4rem 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      color: inherit;
+      transition: 0.4s var(--ease);
+    }
+
+    .post:hover {
+      padding-left: 1rem;
+      background: rgba(0, 0, 0, 0.01);
+    }
+
+    .post-info h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    /* --- STICKY SIDE ANCHORS --- */
+    .side-ui {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .ui-left {
+      left: 1rem;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center left;
+    }
+
+    .ui-right {
+      right: 1rem;
+      transform: translateY(-50%) rotate(90deg);
+      transform-origin: center right;
+    }
+
+    @media (max-width: 1024px) {
+      .side-ui {
+        display: none;
+      }
+    }
+
+    /* Hide on small screens to prevent overlap */
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #2ecc71;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* --- FIXED FOOTER LAYOUT --- */
+    footer {
+      padding: 10rem var(--pad) 4rem;
+      position: relative;
+      width: 100%;
+    }
+
+    .footer-content {
+      position: relative;
+      margin-bottom: 6rem;
+    }
+
+    .footer-big {
+      font-family: var(--font-serif);
+      font-size: clamp(4rem, 16vw, 16rem);
+      line-height: 0.75;
+      letter-spacing: -0.05em;
+      transition: 0.4s var(--ease);
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .footer-big:hover {
+      transform: translateX(20px) italic;
+      font-style: italic;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-top: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    #contact-modal {
+      position: fixed;
+      inset: 0;
+      background: var(--text);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: var(--pad);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cursor"></div>
+
+  <div class="side-ui ui-left">
+    <div class="status-dot"></div>
+    <span>AVAILABLE FOR PROJECTS</span>
+  </div>
+
+  <div class="side-ui ui-right">
+    <span>3.1390° N, 101.6869° E</span>
+  </div>
+
+  <div id="contact-modal">
+    <div id="close-form" style="position: absolute; top: 2rem; right: 2rem; font-weight: 800; cursor: pointer; letter-spacing: 0.1em;">CLOSE</div>
+    <div style="width: 100%; max-width: 500px;">
+      <h2 class="italic" style="font-size: 5rem; margin-bottom: 1.5rem;">Say hi.</h2>
+      <p style="opacity: 0.6; margin-bottom: 2.5rem; font-size: 1.2rem;">Available for creative strategy and logic-driven development.</p>
+      <a href="mailto:hello@nazirnoori.com" style="color: white; font-size: 2rem; text-decoration: none; border-bottom: 1px solid white;">hello@nazirnoori.com</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="brand">NAZIR NOORI</div>
+    <div id="open-contact" style="font-weight: 800; font-size: 0.75rem; letter-spacing: 0.1em;">CONTACT</div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1 class="display">Exploring <span class="italic">human</span> architecture in a <span class="italic">digital</span> world.</h1>
+    </section>
+
+    <section class="feed">
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
+        <div style="font-style: italic; opacity: 0.3;">01</div>
+        <div class="post-info">
+          <h2>What Hurts... Also Heals</h2>
+          <p>Resilience and emotional frameworks.</p>
+        </div>
+        <div style="font-size: 1.5rem;">↗</div>
+      </a>
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
+        <div style="font-style: italic; opacity: 0.3;">02</div>
+        <div class="post-info">
+          <h2>The Sentiment of Logic</h2>
+          <p>Intersection of MBA strategy and code.</p>
+        </div>
+        <div style="font-size: 1.5rem;">↗</div>
+      </a>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div id="footer-trigger">
+          <h2 class="footer-big">Get in <span class="italic">Touch</span></h2>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>LOC — KUALA LUMPUR</div>
+        <div id="time">00:00 KL</div>
+        <div>© 2026 NAZIR NOORI</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const isTouch = ('ontouchstart' in window);
+    if (!isTouch) {
+      let mouse = {
+          x: 0,
+          y: 0
+        },
+        pos = {
+          x: 0,
+          y: 0
+        };
+      document.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      function animate() {
+        pos.x += (mouse.x - pos.x) * 0.2;
+        pos.y += (mouse.y - pos.y) * 0.2;
+        cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+        requestAnimationFrame(animate);
+      }
+      animate();
+      document.querySelectorAll('a, #open-contact, #footer-trigger, #close-form').forEach(item => {
+        item.addEventListener('mouseenter', () => cursor.style.transform += ' scale(6)');
+        item.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(6)', ''));
+      });
+    }
+    const toggleForm = (s) => document.getElementById('contact-modal').style.display = s ? 'flex' : 'none';
+    document.getElementById('open-contact').addEventListener('click', () => toggleForm(true));
+    document.getElementById('footer-trigger').addEventListener('click', () => toggleForm(true));
+    document.getElementById('close-form').addEventListener('click', () => toggleForm(false));
+
+    function updateTime() {
+      const t = new Date().toLocaleTimeString('en-GB', {
+        timeZone: 'Asia/Kuala_Lumpur',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('time').innerText = t + ' KL';
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+    const obs = new IntersectionObserver((es) => {
+      es.forEach(e => {
+        if (e.isIntersecting) document.body.style.backgroundColor = e.target.dataset.color;
+      });
+    }, {
+      threshold: 0.5
+    });
+    document.querySelectorAll('.post').forEach(p => obs.observe(p));
+  </script>
+</body>
+
+</html>
