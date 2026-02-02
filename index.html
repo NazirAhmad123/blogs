@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nazir Noori | Portfolio</title>
+  <title>Nazir Noori — Human Architecture</title>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
@@ -13,8 +14,8 @@
       --accent: #8b8b8b;
       --font-main: 'Bricolage Grotesque', sans-serif;
       --font-serif: 'Instrument Serif', serif;
-      --ease: cubic-bezier(0.19, 1, 0.22, 1);
-      --pad: 5vw; /* Responsive padding */
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --pad: 6vw;
     }
 
     * {
@@ -28,12 +29,26 @@
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-main);
-      transition: background-color 1s var(--ease);
+      transition: background-color 1.2s var(--ease);
       overflow-x: hidden;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
-    /* Custom Cursor - Only for Desktop */
+    /* 1. GRAIN OVERLAY */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Noise_Texture.png");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 99999;
+    }
+
+    /* 2. CUSTOM CURSOR (Desktop Only) */
     #cursor {
       position: fixed;
       width: 12px;
@@ -44,31 +59,37 @@
       z-index: 100000;
       mix-blend-mode: difference;
       display: none;
-      transition: transform 0.3s var(--ease);
     }
 
     @media (pointer: fine) {
-      #cursor { display: block; }
-      body, a, button { cursor: none !important; }
+      #cursor {
+        display: block;
+      }
+
+      body,
+      a,
+      button {
+        cursor: none !important;
+      }
     }
 
-    /* Navigation */
+    /* 3. NAVIGATION GLASSSMORPHISM */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem var(--pad);
+      padding: 2rem var(--pad);
       position: fixed;
       width: 100%;
       top: 0;
-      z-index: 9999;
-      transition: background 0.3s ease, backdrop-filter 0.3s ease;
+      z-index: 9000;
+      transition: all 0.5s var(--ease);
     }
 
     nav.scrolled {
-      background: rgba(245, 245, 243, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 1rem var(--pad);
+      padding: 1.2rem var(--pad);
+      background: rgba(245, 245, 243, 0.7);
+      backdrop-filter: blur(15px);
     }
 
     .brand {
@@ -77,23 +98,22 @@
       letter-spacing: -0.05em;
     }
 
-    #open-contact {
+    .nav-link {
       font-weight: 800;
       font-size: 0.7rem;
       letter-spacing: 0.1em;
-      border-bottom: 1px solid var(--text);
-      padding-bottom: 2px;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Hero Section */
+    /* 4. HERO SECTION */
     .hero {
-      padding: 35vh var(--pad) 10vh;
-      max-width: 1400px;
-      margin: 0 auto;
+      padding: 35vh var(--pad) 15vh;
+      max-width: 1600px;
     }
 
     .display {
-      font-size: clamp(2.8rem, 10vw, 8rem);
+      font-size: clamp(3rem, 11vw, 10rem);
       font-weight: 200;
       line-height: 0.85;
       letter-spacing: -0.06em;
@@ -104,114 +124,158 @@
       font-style: italic;
     }
 
-    /* Feed / Posts */
+    /* 5. MARQUEE SECTION (Creative Addition) */
+    .marquee {
+      padding: 4rem 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      white-space: nowrap;
+    }
+
+    .marquee-content {
+      display: flex;
+      animation: scroll 30s linear infinite;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* 6. FEED WITH IMAGE REVEAL */
     .feed {
-      padding: 0 var(--pad) 5rem;
+      padding: 5rem var(--pad);
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .post {
       display: grid;
-      grid-template-columns: 40px 1fr 30px;
-      gap: 1.5rem;
-      padding: 3rem 0;
+      grid-template-columns: 50px 1fr 40px;
+      gap: 2rem;
+      padding: 4rem 0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       text-decoration: none;
       color: inherit;
-      transition: all 0.4s var(--ease);
+      transition: 0.4s var(--ease);
+      position: relative;
     }
-
-    @media (hover: hover) {
-      .post:hover {
-        padding-left: 1.5rem;
-        background: rgba(0, 0, 0, 0.02);
-      }
-    }
-
-    .post:active { background: rgba(0, 0, 0, 0.05); }
 
     .post-info h2 {
       font-family: var(--font-serif);
-      font-size: clamp(2rem, 6vw, 4rem);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: 400;
-      line-height: 1;
-      margin-bottom: 0.5rem;
+      line-height: 0.9;
     }
 
-    .post-info p {
-      font-size: 0.9rem;
-      opacity: 0.6;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    /* Subtle image preview on hover */
+    .post-preview {
+      position: absolute;
+      right: 10%;
+      top: 50%;
+      width: 200px;
+      height: 120px;
+      background: var(--text);
+      transform: translateY(-50%) scale(0.8) rotate(5deg);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s var(--ease);
+      overflow: hidden;
+      border-radius: 4px;
     }
 
-    /* Side UI Elements */
+    .post:hover .post-preview {
+      opacity: 0.15;
+      transform: translateY(-50%) scale(1) rotate(0deg);
+    }
+
+    .post:hover {
+      padding-left: 2rem;
+    }
+
+    /* 7. SIDEBAR UI */
     .side-ui {
       position: fixed;
       top: 50%;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.3em;
       color: var(--accent);
       z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      white-space: nowrap;
     }
 
-    .ui-left { left: 1rem; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; }
-    .ui-right { right: 1rem; transform: translateY(-50%) rotate(90deg); transform-origin: right center; }
-
-    @media (max-width: 1100px) { .side-ui { display: none; } }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background: #2ecc71;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+    .ui-left {
+      left: 1rem;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: left center;
     }
 
-    /* Footer */
+    .ui-right {
+      right: 1rem;
+      transform: translateY(-50%) rotate(90deg);
+      transform-origin: right center;
+    }
+
+    @media (max-width: 1024px) {
+
+      .side-ui,
+      .post-preview {
+        display: none;
+      }
+    }
+
+    /* 8. FOOTER MAGNET */
     footer {
-      padding: 10rem var(--pad) 3rem;
-      background: transparent;
+      padding: 15rem var(--pad) 4rem;
     }
 
     .footer-big {
       font-family: var(--font-serif);
-      font-size: clamp(3.5rem, 18vw, 15rem);
-      line-height: 0.8;
+      font-size: clamp(4rem, 18vw, 16rem);
+      line-height: 0.75;
       letter-spacing: -0.05em;
-      transition: 0.5s var(--ease);
-      display: inline-block;
+      cursor: pointer;
+      transition: 0.6s var(--ease);
+    }
+
+    .footer-big:hover {
+      transform: skewX(-5deg);
+      color: var(--accent);
     }
 
     .footer-bottom {
       display: flex;
       justify-content: space-between;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding-top: 2rem;
-      margin-top: 5rem;
-      opacity: 0.6;
+      margin-top: 8rem;
     }
 
-    /* Modal Styling */
+    /* 9. MODAL UPGRADE */
     #contact-modal {
       position: fixed;
       inset: 0;
       background: var(--text);
-      z-index: 10001;
+      z-index: 10000;
       display: none;
       align-items: center;
       justify-content: center;
       color: white;
       padding: var(--pad);
       opacity: 0;
-      transition: opacity 0.5s var(--ease);
+      transition: opacity 0.6s var(--ease);
     }
 
     #contact-modal.active {
@@ -219,29 +283,18 @@
       opacity: 1;
     }
 
-    .modal-content {
-      width: 100%;
-      max-width: 600px;
-      transform: translateY(20px);
-      transition: transform 0.6s var(--ease);
-    }
+    /* 10. RESPONSIVE REFINEMENT */
+    @media (max-width: 768px) {
+      .post {
+        grid-template-columns: 30px 1fr 20px;
+        gap: 1rem;
+        padding: 3rem 0;
+      }
 
-    #contact-modal.active .modal-content { transform: translateY(0); }
-
-    .mail-link {
-      color: white;
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 5px;
-      transition: border 0.3s;
-    }
-
-    .mail-link:hover { border-bottom: 1px solid white; }
-
-    @media (max-width: 600px) {
-        .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; align-items: center; }
-        .post { grid-template-columns: 30px 1fr 20px; gap: 1rem; }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -249,27 +302,21 @@
 <body>
   <div id="cursor"></div>
 
-  <div class="side-ui ui-left">
-    <div class="status-dot"></div>
-    <span>AVAILABLE FOR PROJECTS</span>
-  </div>
-
-  <div class="side-ui ui-right">
-    <span>3.1390° N, 101.6869° E</span>
-  </div>
+  <div class="side-ui ui-left">AVAILABLE FOR PROJECTS — 2026</div>
+  <div class="side-ui ui-right">3.1390° N, 101.6869° E</div>
 
   <div id="contact-modal">
-    <div id="close-form" style="position: absolute; top: 2rem; right: var(--pad); font-weight: 800; cursor: pointer;">CLOSE</div>
-    <div class="modal-content">
-      <h2 class="italic" style="font-size: clamp(3rem, 10vw, 5rem); margin-bottom: 1rem;">Say hi.</h2>
-      <p style="opacity: 0.6; margin-bottom: 2rem;">Available for creative strategy and development.</p>
-      <a href="mailto:hello@nazirnoori.com" class="mail-link">hello@nazirnoori.com</a>
+    <div id="close-form" style="position: absolute; top: 2rem; right: 2rem; cursor: pointer; font-weight: 800;">CLOSE</div>
+    <div style="max-width: 600px;">
+      <h2 class="italic" style="font-size: clamp(3rem, 12vw, 6rem);">Let's build.</h2>
+      <p style="margin: 2rem 0; opacity: 0.6;">Specializing in the intersection of logic and emotion.</p>
+      <a href="mailto:hello@nazirnoori.com" style="color: white; font-size: 2rem; text-decoration: none; border-bottom: 2px solid white;">nazir_noori@yahoo.com</a>
     </div>
   </div>
 
   <nav id="navbar">
     <div class="brand">NAZIR NOORI</div>
-    <div id="open-contact" style="cursor: pointer;">CONTACT</div>
+    <div id="open-contact" class="nav-link" style="cursor: pointer;">GET IN TOUCH</div>
   </nav>
 
   <main>
@@ -277,104 +324,126 @@
       <h1 class="display">Exploring <span class="italic">human</span> architecture in a <span class="italic">digital</span> world.</h1>
     </section>
 
+    <div class="marquee">
+      <div class="marquee-content">
+        STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
+        STRATEGY • DEVELOPMENT • DESIGN • PSYCHOLOGY • ARCHITECTURE • LOGIC • EMOTION •&nbsp;
+      </div>
+    </div>
+
     <section class="feed">
-      <a href="#" class="post" data-color="#f2f2ee">
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f2f2ee">
         <div style="font-style: italic; opacity: 0.3;">01</div>
         <div class="post-info">
           <h2>What Hurts... Also Heals</h2>
-          <p>Resilience Frameworks</p>
+          <p>Resilience and emotional frameworks.</p>
         </div>
-        <div style="font-size: 1.2rem;">↗</div>
+        <div class="post-preview"></div>
+        <div style="font-size: 1.5rem;">↗</div>
       </a>
-      <a href="#" class="post" data-color="#edeef5">
+
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#edeef5">
         <div style="font-style: italic; opacity: 0.3;">02</div>
         <div class="post-info">
           <h2>The Sentiment of Logic</h2>
-          <p>MBA Strategy + Code</p>
+          <p>MBA strategy meets clean code.</p>
         </div>
-        <div style="font-size: 1.2rem;">↗</div>
+        <div class="post-preview"></div>
+        <div style="font-size: 1.5rem;">↗</div>
+      </a>
+
+      <a href="https://nazirnoorii.medium.com/" target="_blank" class="post" data-color="#f5ebe0">
+        <div style="font-style: italic; opacity: 0.3;">03</div>
+        <div class="post-info">
+          <h2>The Paradox of Comfort</h2>
+          <p>Why digital friction is necessary.</p>
+        </div>
+        <div class="post-preview"></div>
+        <div style="font-size: 1.5rem;">↗</div>
       </a>
     </section>
 
     <footer>
-      <div id="footer-trigger" style="cursor: pointer;">
-        <h2 class="footer-big">Get in <span class="italic">Touch</span></h2>
+      <div id="footer-trigger">
+        <h2 class="footer-big">Contact <span class="italic">Me</span></h2>
       </div>
-
       <div class="footer-bottom">
         <div>LOC — KUALA LUMPUR</div>
         <div id="time">00:00 KL</div>
-        <div>© 2026 NAZIR NOORI</div>
+        <div>© 2026 NAZIR NOORI — ALL RIGHTS RESERVED</div>
       </div>
     </footer>
   </main>
 
   <script>
-    // 1. Optimized Custom Cursor
+    // Cursor Logic
     const cursor = document.getElementById('cursor');
     if (window.matchMedia("(pointer: fine)").matches) {
-      let mouse = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
-      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-
-      const updateCursor = () => {
+      let mouse = {
+          x: 0,
+          y: 0
+        },
+        pos = {
+          x: 0,
+          y: 0
+        };
+      window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      const anim = () => {
         pos.x += (mouse.x - pos.x) * 0.15;
         pos.y += (mouse.y - pos.y) * 0.15;
         cursor.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(updateCursor);
+        requestAnimationFrame(anim);
       };
-      updateCursor();
-
+      anim();
       document.querySelectorAll('a, #open-contact, #footer-trigger, #close-form').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(5)');
-        el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(5)', ''));
+        el.addEventListener('mouseenter', () => cursor.style.transform += ' scale(6)');
+        el.addEventListener('mouseleave', () => cursor.style.transform = cursor.style.transform.replace(' scale(6)', ''));
       });
     }
-
-    // 2. Navigation Scroll Effect
-    const nav = document.getElementById('navbar');
+    // Nav Scroll
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) nav.classList.add('scrolled');
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 100) nav.classList.add('scrolled');
       else nav.classList.remove('scrolled');
     });
-
-    // 3. Modal Logic
+    // Modal
     const modal = document.getElementById('contact-modal');
-    const toggleForm = (open) => {
-      if (open) {
+    const toggleModal = (on) => {
+      if (on) {
+        modal.classList.add('active');
         modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('active'), 10);
       } else {
         modal.classList.remove('active');
-        setTimeout(() => modal.style.display = 'none', 500);
+        setTimeout(() => modal.style.display = 'none', 600);
       }
     };
-    document.getElementById('open-contact').addEventListener('click', () => toggleForm(true));
-    document.getElementById('footer-trigger').addEventListener('click', () => toggleForm(true));
-    document.getElementById('close-form').addEventListener('click', () => toggleForm(false));
-
-    // 4. Background Color Intersection Observer
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          document.body.style.backgroundColor = entry.target.dataset.color;
-        } else {
-            // Optional: Reset to default if not over a post
-            // document.body.style.backgroundColor = 'var(--bg)';
-        }
+    document.getElementById('open-contact').addEventListener('click', () => toggleModal(true));
+    document.getElementById('footer-trigger').addEventListener('click', () => toggleModal(true));
+    document.getElementById('close-form').addEventListener('click', () => toggleModal(false));
+    // BG Color Shift
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) document.body.style.backgroundColor = e.target.dataset.color;
       });
-    }, { threshold: 0.4 });
-    document.querySelectorAll('.post').forEach(p => obs.observe(p));
-
-    // 5. Time Update
-    function updateTime() {
+    }, {
+      threshold: 0.5
+    });
+    document.querySelectorAll('.post').forEach(p => observer.observe(p));
+    // Time
+    const updateTime = () => {
       const t = new Date().toLocaleTimeString('en-GB', {
         timeZone: 'Asia/Kuala_Lumpur',
-        hour: '2-digit', minute: '2-digit'
+        hour: '2-digit',
+        minute: '2-digit'
       });
       document.getElementById('time').innerText = t + ' KL';
-    }
+    };
     setInterval(updateTime, 1000);
     updateTime();
   </script>
 </body>
+
 </html>
